@@ -30,7 +30,7 @@ const generateAuthToken = (userId: string) => {
 };
 
 export const registerController = async (req: Request, res: Response) => {
-  const { username, email, password, role } = req.body;
+  const { username, email, password} = req.body;
 
   try {
     const existingUser = await userRepository.findOneBy({ email });
@@ -43,7 +43,7 @@ export const registerController = async (req: Request, res: Response) => {
       username,
       email,
       password: hashedPassword,
-      role
+      role: "user"
     });
 
     await userRepository.save(user);
