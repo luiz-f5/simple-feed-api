@@ -43,7 +43,6 @@ export const registerController = async (req: Request, res: Response) => {
       username,
       email,
       password: hashedPassword,
-      role: "user"
     });
 
     await userRepository.save(user);

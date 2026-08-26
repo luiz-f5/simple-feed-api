@@ -11,7 +11,6 @@ export const fetchItems = async (
   urls: string[],
   sort: SortMode = "timestamp"
 ): Promise<Article[] | Record<string, Article[]>> => {
-  // Busca todos os feeds em paralelo sem travar se algum falhar
   const results = await Promise.allSettled(
     urls.map(async (url) => {
       const rule = getRuleForUrl(url);
@@ -59,15 +58,12 @@ export const fetchItems = async (
     })
   );
 
-  // Filtra e junta os resultados obtidos com sucesso
   const allArticles: Article[] = results.flatMap((res) =>
     res.status === "fulfilled" ? res.value : []
   );
 
-  // Formata as datas dos artigos extraídos
   const formattedArticles = dateService(allArticles);
 
-  // Ordenação/Agrupamento baseado na preferência informada
   if (sort === "source") {
     return formattedArticles.reduce<Record<string, Article[]>>((acc, article) => {
       const groupKey = article.source || "general";
@@ -79,6 +75,5 @@ export const fetchItems = async (
     }, {});
   }
 
-  // Padrão: Ordenação Cronológica (Decrescente por Timestamp)
   return formattedArticles.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 };

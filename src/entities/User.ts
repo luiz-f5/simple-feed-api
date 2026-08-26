@@ -15,9 +15,6 @@ export class User {
   @Column()
   password!: string;
 
-  @Column({ unique: true, default: "user" })
-  role!: "user" | "admin"
-
   @CreateDateColumn()
   createdAt!: Date;
 }
